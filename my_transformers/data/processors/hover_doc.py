@@ -7,8 +7,8 @@ from multiprocessing import Pool, cpu_count
 import numpy as np
 from tqdm import tqdm
 
-from transformers.tokenization_bert import whitespace_tokenize
 from transformers.data.processors.utils import DataProcessor
+from transformers import BertTokenizer
 
 import torch
 from torch.utils.data import TensorDataset
@@ -39,12 +39,12 @@ def hover_convert_example_to_features(example, max_seq_length, max_doc_num, doc_
     spans = []
 
     truncated_claim = tokenizer.encode(example.claim_text, add_special_tokens=False, max_length=max_query_length)
-    sequence_added_tokens = (
-        tokenizer.max_len - tokenizer.max_len_single_sentence + 1
-        if "roberta" in str(type(tokenizer)) or "camembert" in str(type(tokenizer))
-        else tokenizer.max_len - tokenizer.max_len_single_sentence
-    )
-    sequence_pair_added_tokens = tokenizer.max_len - tokenizer.max_len_sentences_pair
+    # sequence_added_tokens = (
+    #     tokenizer.max_len - tokenizer.max_len_single_sentence + 1
+    #     if "roberta" in str(type(tokenizer)) or "camembert" in str(type(tokenizer))
+    #     else tokenizer.max_len - tokenizer.max_len_single_sentence
+    # )
+    sequence_pair_added_tokens = tokenizer.model_max_length - tokenizer.max_len_sentences_pair
 
     all_input_ids, all_attention_masks, all_token_type_ids, all_tokens = [], [], [], []
 
@@ -56,9 +56,9 @@ def hover_convert_example_to_features(example, max_seq_length, max_doc_num, doc_
             span_doc_tokens if tokenizer.padding_side == "right" else truncated_claim,
             max_length=max_seq_length,
             return_overflowing_tokens=True,
-            pad_to_max_length=True,
+            padding=True,
             stride=max_seq_length - doc_stride - len(truncated_claim) - sequence_pair_added_tokens,
-            truncation_strategy="only_second",
+            truncation="only_second",
             return_token_type_ids=True,
         )
 
@@ -137,7 +137,7 @@ def hover_convert_example_to_features(example, max_seq_length, max_doc_num, doc_
     return features
 
 
-def hover_convert_example_to_features_init(tokenizer_for_convert):
+def hover_convert_example_to_features_init(tokenizer_for_convert: BertTokenizer):
     global tokenizer
     tokenizer = tokenizer_for_convert
 

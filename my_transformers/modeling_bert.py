@@ -25,8 +25,8 @@ from torch import nn
 from torch.nn import CrossEntropyLoss, MSELoss, MarginRankingLoss
 import torch.nn.functional as F
 
-from transformers.configuration_bert import BertConfig
-from transformers.file_utils import add_start_docstrings, add_start_docstrings_to_callable
+from transformers import BertConfig
+from transformers.file_utils import add_start_docstrings, add_start_docstrings_to_model_forward
 from transformers.modeling_utils import PreTrainedModel, prune_linear_layer
 
 
@@ -721,7 +721,7 @@ class BertModel(BertPreTrainedModel):
         for layer, heads in heads_to_prune.items():
             self.encoder.layer[layer].attention.prune_heads(heads)
 
-    @add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
+    @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING)
     def forward(
         self,
         input_ids=None,
@@ -936,7 +936,7 @@ class BertHexModel(BertPreTrainedModel):
         for layer, heads in heads_to_prune.items():
             self.encoder.layer[layer].attention.prune_heads(heads)
 
-    @add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
+    @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING)
     def forward(
         self,
         input_ids=None,
@@ -1128,7 +1128,7 @@ class BertForPreTraining(BertPreTrainedModel):
     def get_output_embeddings(self):
         return self.cls.predictions.decoder
 
-    @add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
+    @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING)
     def forward(
         self,
         input_ids=None,
@@ -1228,7 +1228,7 @@ class BertForMaskedLM(BertPreTrainedModel):
     def get_output_embeddings(self):
         return self.cls.predictions.decoder
 
-    @add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
+    @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING)
     def forward(
         self,
         input_ids=None,
@@ -1339,7 +1339,7 @@ class BertForNextSentencePrediction(BertPreTrainedModel):
 
         self.init_weights()
 
-    @add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
+    @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING)
     def forward(
         self,
         input_ids=None,
@@ -1428,7 +1428,7 @@ class BertForSequenceClassification(BertPreTrainedModel):
 
         self.init_weights()
 
-    @add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
+    @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING)
     def forward(
         self,
         input_ids=None,
@@ -1524,7 +1524,7 @@ class BertForMultipleChoice(BertPreTrainedModel):
 
         self.init_weights()
 
-    @add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
+    @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING)
     def forward(
         self,
         input_ids=None,
@@ -1625,7 +1625,7 @@ class BertForTokenClassification(BertPreTrainedModel):
 
         self.init_weights()
 
-    @add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
+    @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING)
     def forward(
         self,
         input_ids=None,
@@ -1720,7 +1720,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
 
         self.init_weights()
 
-    @add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
+    @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING)
     def forward(
         self,
         input_ids=None,
@@ -1834,7 +1834,7 @@ class BertForMultiClassMultipleChoice(BertPreTrainedModel):
 
         self.init_weights()
 
-    @add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
+    @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING)
     def forward(
         self,
         input_ids=None,
@@ -1937,7 +1937,7 @@ class BertForMultiClassMultipleChoiceSp(BertPreTrainedModel):
         self.linear_sp = nn.Linear(config.hidden_size, 1)
         self.init_weights()
 
-    @add_start_docstrings_to_callable(BERT_INPUTS_DOCSTRING)
+    @add_start_docstrings_to_model_forward(BERT_INPUTS_DOCSTRING)
     def forward(
         self,
         input_ids=None,

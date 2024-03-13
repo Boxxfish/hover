@@ -7,7 +7,6 @@ from multiprocessing import Pool, cpu_count
 import numpy as np
 from tqdm import tqdm
 
-from transformers.tokenization_bert import whitespace_tokenize
 from transformers.data.processors.utils import DataProcessor
 
 import torch

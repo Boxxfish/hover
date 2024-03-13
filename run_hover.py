@@ -37,6 +37,7 @@ from transformers import (
     BertTokenizer,
     get_linear_schedule_with_warmup,
     squad_convert_examples_to_features,
+    BERT_PRETRAINED_CONFIG_ARCHIVE_MAP
 )
 
 from torch.utils.tensorboard import SummaryWriter
@@ -44,10 +45,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 logger = logging.getLogger(__name__)
 
-ALL_MODELS = sum(
-    (tuple(conf.pretrained_config_archive_map.keys()) for conf in (BertConfig,)),
-    (),
-)
+ALL_MODELS = list(BERT_PRETRAINED_CONFIG_ARCHIVE_MAP.keys())
 
 MODEL_CLASSES = {
     "bert": (BertConfig, None, BertTokenizer),
